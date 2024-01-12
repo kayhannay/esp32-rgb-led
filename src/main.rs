@@ -2,8 +2,10 @@
 #![no_main]
 
 use esp32c6_hal::{clock::ClockControl, gpio::IO, peripherals::Peripherals, prelude::*, Delay, Rmt};
+use esp_backtrace as _;
 use esp_println::println;
 use esp_hal_smartled::{smartLedBuffer, SmartLedsAdapter};
+use palette::{FromColor, Hsv, Srgb};
 use smart_leds::RGB8;
 use smart_leds::SmartLedsWrite;
 
@@ -31,59 +33,11 @@ fn main() -> ! {
         if h > 360.0 {
             h = 0.0;
         }
-        let (r, g, b) = hsv_to_rgb(h + 20.0, s, v);
+        let rgb = Srgb::from_color(Hsv::new(h + 20.0, s, v));
+        let (r, g, b) = ((rgb.red * 255.0) as u8, (rgb.green * 255.0) as u8, (rgb.blue * 255.0) as u8);
         //println!("h: {}, s: {}, v: {} -> r: {}, g: {}, b: {}", h, s, v, r, g, b);
-        let data = [RGB8::new(r as u8, g as u8, b as u8); 1];
+        let data = [RGB8::new(r, g, b); 1];
         led.write(data.iter().cloned()).unwrap();
-        delay.delay_ms(30u32);
+        delay.delay_ms(20u32);
     }
-}
-
-fn hsv_to_rgb(h: f32, s: f32, v: f32) -> (i32, i32, i32) {
-    let mut r = 0.0;
-    let mut g = 0.0;
-    let mut b = 0.0;
-
-    let i = (h / 60.0) as i32 % 6;
-    //println!("i: {}", i);
-    let f = h / 60.0 - (h / 60.0) as i32 as f32;
-    let p = v * (1.0 - s);
-    let q = v * (1.0 - (s * f));
-    let t = v * (1.0 - (1.0 - f) * s);
-
-    match i {
-        0 => {
-            r = v;
-            g = t;
-            b = p;
-        }
-        1 => {
-            r = q;
-            g = v;
-            b = p;
-        }
-        2 => {
-            r = p;
-            g = v;
-            b = t;
-        }
-        3 => {
-            r = p;
-            g = q;
-            b = v;
-        }
-        4 => {
-            r = t;
-            g = p;
-            b = v;
-        }
-        5 => {
-            r = v;
-            g = p;
-            b = q;
-        }
-        _ => {}
-    }
-
-    ((r * 255.0) as i32, (g * 255.0) as i32, (b * 255.0) as i32)
 }

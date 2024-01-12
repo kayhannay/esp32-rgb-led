@@ -395,7 +395,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c0b0597e7f5d09d1431fb5a788f6fd794a4e1d7de2179e165c868ddb2804c78c"
 dependencies = [
  "defmt",
- "esp-println 0.8.0",
+ "esp-println",
 ]
 
 [[package]]
@@ -475,18 +475,14 @@ dependencies = [
 
 [[package]]
 name = "esp-println"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "678ad508e8e61561eccee27003a5033901fe07fe8700508c324849b3df930ef5"
-dependencies = [
- "critical-section",
-]
-
-[[package]]
-name = "esp-println"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1e4c46223e9f05304d2733f935bf3c50af108b2ca24ff53a7aba21584d5bbbb9"
+dependencies = [
+ "critical-section",
+ "log",
+ "portable-atomic",
+]
 
 [[package]]
 name = "esp-riscv-rt"
@@ -572,6 +568,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c1a4dd97ac2ea1572434d5353a6bdeb86072d7864f9018221e7a04b5aa52689"
 dependencies = [
  "esp-hal-common",
+]
+
+[[package]]
+name = "esp32-rgb-led"
+version = "0.1.0"
+dependencies = [
+ "esp-backtrace",
+ "esp-hal-smartled",
+ "esp-println",
+ "esp-wifi",
+ "esp32c6-hal",
+ "palette",
+ "smart-leds",
 ]
 
 [[package]]
@@ -693,6 +702,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fast-srgb8"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dd2e7510819d6fbf51a5545c8f922716ecfb14df168a3242f7d33e0239efe6a1"
+
+[[package]]
 name = "flate2"
 version = "1.0.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -802,23 +817,6 @@ name = "heck"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
-
-[[package]]
-name = "hello"
-version = "0.1.0"
-dependencies = [
- "embedded-io",
- "embedded-svc",
- "esp-backtrace",
- "esp-hal-smartled",
- "esp-println 0.7.1",
- "esp-wifi",
- "esp32c6-hal",
- "fugit",
- "heapless 0.7.17",
- "smart-leds",
- "smoltcp",
-]
 
 [[package]]
 name = "ident_case"
@@ -979,6 +977,28 @@ dependencies = [
  "flate2",
  "memchr",
  "ruzstd",
+]
+
+[[package]]
+name = "palette"
+version = "0.7.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b2e2f34147767aa758aa649415b50a69eeb46a67f9dc7db8011eeb3d84b351dc"
+dependencies = [
+ "fast-srgb8",
+ "libm",
+ "palette_derive",
+]
+
+[[package]]
+name = "palette_derive"
+version = "0.7.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b7db010ec5ff3d4385e4f133916faacd9dad0f6a09394c92d825b3aed310fa0a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.48",
 ]
 
 [[package]]
